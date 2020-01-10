@@ -30,9 +30,6 @@ def main(mytimer: func.TimerRequest) -> None:
         stk_codes = json.loads(response.text)
 
         for code in stk_codes:
-            if not code:
-                continue
-
             logging.info(code["stock"])
             threading.Thread(target=invoke_url, args=(function_url, code["stock"], x_functions_key)).start()
             pass 
