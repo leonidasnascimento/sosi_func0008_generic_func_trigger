@@ -19,8 +19,7 @@ def main(mytimer: func.TimerRequest) -> None:
 
     try:
         logging.info("Timer job 'sosi_func0008_generic_func_trigger' has begun")
-
-        url_query_str: str = "{}/?code={}"        
+        
         config_obj: reader = reader(SETTINGS_FILE_PATH, 'Values')
         function_url: str = config_obj.get_value("function_url")
         stock_code_list_service_url: str = config_obj.get_value("stock_code_list_service_url")
@@ -35,22 +34,21 @@ def main(mytimer: func.TimerRequest) -> None:
                 continue
 
             logging.info(code["stock"])
-            function_url_aux: str = url_query_str.format(function_url, code["stock"])
-
-            threading.Thread(target=start_function, args=(function_url_aux,x_functions_key,)).start()
+            threading.Thread(target=invoke_url, args=(function_url, code["stock"], x_functions_key)).start()
             pass 
     except Exception as ex:
         error_log = '{} -> {}'.format(utc_timestamp, str(ex))
         logging.exception(error_log)
     pass
 
-def start_function(url: str, x_functions_key: str):    
+def invoke_url(url: str, code: str, x_functions_key: str):    
+    querystring = {"code": code}
+    
     headers = {
         'content-type': "application/json",
         'cache-control': "no-cache",
-        'x-functions-key': x_functions_key,
-        'content-length': str(len(str(json).encode('utf-8')))
+        'x-functions-key': x_functions_key
     }
 
-    requests.request("POST", url, headers=headers)
+    requests.request("POST", url, headers=headers, params=querystring)
     pass
