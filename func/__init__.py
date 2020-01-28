@@ -28,10 +28,18 @@ def main(mytimer: func.TimerRequest) -> None:
         # Getting stock code list
         response = requests.request("GET", stock_code_list_service_url)
         stk_codes = json.loads(response.text)
+        req_count: int  = 0
 
         for code in stk_codes:
             logging.info(code["stock"])
             threading.Thread(target=invoke_url, args=(function_url, code["stock"], x_functions_key)).start()
+            
+            req_count = req_count + 1
+
+            if req_count == 100:
+                time.sleep(5)
+                req_count = 0
+                pass
             pass 
     except Exception as ex:
         error_log = '{} -> {}'.format(utc_timestamp, str(ex))
