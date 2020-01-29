@@ -36,7 +36,7 @@ def main(mytimer: func.TimerRequest) -> None:
             
             req_count = req_count + 1
 
-            if req_count == 50:
+            if req_count == 100:
                 time.sleep(5)
                 req_count = 0
                 pass
