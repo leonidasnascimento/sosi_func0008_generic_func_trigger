@@ -34,12 +34,12 @@ def main(mytimer: func.TimerRequest) -> None:
             logging.info(code["stock"])
             threading.Thread(target=invoke_url, args=(function_url, code["stock"], x_functions_key)).start()
             
-            req_count = req_count + 1
+            # req_count = req_count + 1
 
-            if req_count == 100:
-                time.sleep(5)
-                req_count = 0
-                pass
+            # if req_count == 100:
+            #     time.sleep(5)
+            #     req_count = 0
+            #     pass
             pass 
     except Exception as ex:
         error_log = '{} -> {}'.format(utc_timestamp, str(ex))
