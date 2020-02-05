@@ -43,7 +43,11 @@ def main(mytimer: func.TimerRequest) -> None:
 
             thread_pool.append(t)
             t.start()
-            
+
+        # for t in thread_pool:
+        #     if t and t.is_alive():
+        #         t.join()
+
     except Exception as ex:
         error_log = '{} -> {}'.format(utc_timestamp, str(ex))
         logging.exception(error_log)
@@ -59,5 +63,5 @@ def invoke_url(url: str, code: str, x_functions_key: str):
         'x-functions-key': x_functions_key
     }
 
-    requests.request("POST", url, headers=headers, params=querystring)
-    pass
+    response: requests.Response = requests.request("POST", url, headers=headers, params=querystring)
+    return response
